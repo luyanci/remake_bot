@@ -78,6 +78,7 @@ func (h *Handler) CommandRemake(c tele.Context) error {
 		oldGender := h.remake.RemakeCount[c.Sender().ID].count
 		h.remake.RemakeCount[c.Sender().ID] = &RemakeData{
 			country: randomCountry.CountryName,
+			locate:  remakeLocate[remakeResult_Locate],
 			gender:  remakeData[remakeResult],
 			count:   oldGender + 1,
 		}
@@ -111,7 +112,7 @@ func (h *Handler) CommandRemakeData(c tele.Context) error {
 	var text string
 	userData, hasKey := h.remake.RemakeCount[c.Sender().ID]
 	if hasKey {
-		text = fmt.Sprintf("您现在是 %s 的 %s，共 remake 了 %d 次", userData.country, userData.gender, userData.count)
+		text = fmt.Sprintf("您现在是 %s %s 的 %s ，共 remake 了 %d 次", userData.country, userData.locate, userData.gender, userData.count)
 	} else {
 		text = "您还没有 remake 过呢，快 /remake 吧"
 	}
