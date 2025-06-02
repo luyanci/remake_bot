@@ -2,8 +2,11 @@
 set -e
 
 # 等待 PostgreSQL 服务启动并就绪
-echo "Waiting for PostgreSQL to start..."
-while! pg_isready -U $POSTGRES_USER -d $POSTGRES_DB -h localhost -p 5432; do
+while :; do
+    pg_isready -U $POSTGRES_USER -d $POSTGRES_DB -h localhost -p 5432 > /dev/null 2>&1
+    if [ $? -eq 0 ]; then
+        break
+    fi
     sleep 1
 done
 echo "PostgreSQL is ready."
