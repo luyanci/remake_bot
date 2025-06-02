@@ -12,8 +12,8 @@
 
 推荐使用 Docker 部署，比较方便：
 ```bash
-docker pull ghcr.io/purofle/sbbot:latest
-docker run --restart always --env TOKEN=your_telegram_bot_token --name sbbot sbbot:latest
+docker pull ghcr.io/luyanci/remake_bot:latest
+docker run --restart always --env TOKEN=your_telegram_bot_token --name remake_bot remake_bot:latest
 ```
 
 当然也可手动部署：
