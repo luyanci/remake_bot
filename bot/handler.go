@@ -168,7 +168,7 @@ func (h *Handler) CommandMsgStats(c tele.Context) error {
 	}
 
 	text := fmt.Sprintf("您今天发了 %d 条消息\n最近 24 小时内的龙王是 %s！一共水了 %d 条消息", count, member.User.FirstName, topCounter)
-	_, err := c.Bot().Reply(c.Message(), text)
+	reply, err := c.Bot().Reply(c.Message(), text)
 	if err != nil {
 		return err
 	}
@@ -178,6 +178,7 @@ func (h *Handler) CommandMsgStats(c tele.Context) error {
 	}
 
 	time.AfterFunc(10*time.Second, func() {
+  fmt.Println("The variable value is", reply)
 		// err = c.Bot().Delete(reply)
 		// err = c.Bot().Delete(c.Message())
 		if err != nil {
