@@ -4,9 +4,10 @@ on:
  workflow_dispatch:
  push:
     branches:
-      - main # default branch
+      - yc # default branch
     paths:
       - bot/**/**
+      - .github/workflows/docker.yml
 
 jobs:
   Ghcr:
