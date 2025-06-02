@@ -83,7 +83,7 @@ func (h *Handler) CommandRemake(c tele.Context) error {
 
 	text := fmt.Sprintf("转生成功！您现在是 %s 的 %s 了。", randomCountry.CountryName, remakeData[remakeResult])
 
-	reply, err := c.Bot().Reply(msg, text)
+	_, err := c.Bot().Reply(msg, text)
 	if err != nil {
 		return err
 	}
@@ -114,7 +114,7 @@ func (h *Handler) CommandRemakeData(c tele.Context) error {
 		text = "您还没有 remake 过呢，快 /remake 吧"
 	}
 
-	reply, err := c.Bot().Reply(msg, text)
+	_, err := c.Bot().Reply(msg, text)
 	if err != nil {
 		return err
 	}
@@ -168,7 +168,7 @@ func (h *Handler) CommandMsgStats(c tele.Context) error {
 	}
 
 	text := fmt.Sprintf("您今天发了 %d 条消息\n最近 24 小时内的龙王是 %s！一共水了 %d 条消息", count, member.User.FirstName, topCounter)
-	reply, err := c.Bot().Reply(c.Message(), text)
+	_, err := c.Bot().Reply(c.Message(), text)
 	if err != nil {
 		return err
 	}
