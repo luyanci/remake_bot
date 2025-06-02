@@ -14,6 +14,7 @@ type Country struct {
 type RemakeData struct {
 	count   int64
 	country string
+	locate  string
 	gender  string
 }
 
