@@ -9,6 +9,8 @@ RUN go mod tidy -v;CGO_ENABLED=0 go build -o /bot
 # 使用官方的 PostgreSQL 基础镜像
 FROM postgres:14
 
+RUN apk update && apk add --no-cache bash
+
 # 设置环境变量，定义数据库用户名和密码
 ENV POSTGRES_USER=postgres
 ENV POSTGRES_PASSWORD=114514
