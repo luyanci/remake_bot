@@ -10,9 +10,9 @@ RUN go mod tidy -v;CGO_ENABLED=0 go build -o /bot
 FROM postgres:14
 
 # 设置环境变量，定义数据库用户名和密码
-ENV POSTGRES_USER=your_username
-ENV POSTGRES_PASSWORD=your_password
-ENV POSTGRES_DB=your_database_name
+ENV POSTGRES_USER=postgres
+ENV POSTGRES_PASSWORD=114514
+ENV POSTGRES_DB=postgres
 
 # 将初始化 SQL 脚本复制到镜像中（如果有额外的初始化需求）
 # COPY init.sql /docker-entrypoint-initdb.d/
