@@ -1,7 +1,7 @@
 package bot
 
 import (
-	"github.com/purofle/luyanci/database"
+	"github.com/luyanci/remake_bot/database"
 	"go.uber.org/fx"
 )
 
