@@ -1,4 +1,4 @@
-module github.com/purofle/remake_bot
+module github.com/luyanci/remake_bot
 
 go 1.21
 
