@@ -61,9 +61,11 @@ func (h *Handler) getRandomCountry() Country {
 func (h *Handler) CommandRemake(c tele.Context) error {
 	msg := c.Message()
 
-	remakeData := []string{"男孩子", "女孩子", "MtF", "FtM", "MtC", "萝莉", "正太", "武装直升机", "沃尔玛购物袋", "星巴克", "无性别", "扶她", "死胎", "xyn", "Furry", "变态", "鲨鲨", "鸽子", "狗狗", "海鸥" ,"猫猫"}
+	remakeData := []string{"男孩子", "女孩子", "MtF", "FtM", "MtC", "萝莉", "正太", "武装直升机", "沃尔玛购物袋", "星巴克", "无性别", "扶她", "死胎", "xyn", "Furry", "变态", "鲨鲨", "鸽子", "狗狗", "海鸥" ,"猫猫","鼠鼠","猪猪","薯条",}
+	remakeLocate := []string{"首都","省会","直辖市","市区","县城","自治区","农村","大学"}
 
 	remakeResult := rand.Intn(len(remakeData))
+	remakeResult_Locate := rand.Intn(len(remakeLocate))
 	randomCountry := h.getRandomCountry()
 
 	func() {
@@ -81,7 +83,7 @@ func (h *Handler) CommandRemake(c tele.Context) error {
 		}
 	}()
 
-	text := fmt.Sprintf("转生成功！您现在是 %s 的 %s 了。", randomCountry.CountryName, remakeData[remakeResult])
+	text := fmt.Sprintf("重生成功！您出生在 %s 的 %s ，是 %s 喵。", randomCountry.CountryName,remakeLocate[remakeResult_Locate], remakeData[remakeResult])
 
 	_, err := c.Bot().Reply(msg, text)
 	if err != nil {
