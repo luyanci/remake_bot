@@ -3,7 +3,7 @@ package bot
 import (
 	"database/sql"
 	"fmt"
-	"github.com/purofle/remake_bot/bot/quotely"
+	"github.com/luyanci/remake_bot/bot/quotely"
 	"go.uber.org/zap"
 	tele "gopkg.in/telebot.v3"
 	"math/rand"

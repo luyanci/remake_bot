@@ -2,7 +2,7 @@ package main
 
 import (
 	_ "github.com/lib/pq"
-	"github.com/purofle/remake_bot/bot"
+	"github.com/luyanci/remake_bot/bot"
 	"go.uber.org/fx"
 	"go.uber.org/fx/fxevent"
 	"go.uber.org/zap"

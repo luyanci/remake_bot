@@ -4,7 +4,8 @@ import (
 	"context"
 	"database/sql"
 	_ "github.com/lib/pq"
- "os"
+	"os"
+	"fmt"
 	"go.uber.org/fx"
 	"go.uber.org/zap"
 )
@@ -18,19 +19,19 @@ func NewDatabase(lc fx.Lifecycle, logger *zap.Logger) (*sql.DB, error) {
         port := os.Getenv("POSTGRES_PORT")
         dbname := os.Getenv("POSTGRES_DB")
         if user == "" {
-            user = "postgres"
+        	user = "postgres"
         }
         if password == "" {
-            password = "114514"
+        	password = "114514"
         }
         if host == "" {
-            host = "localhost"
+            	host = "localhost"
         }
         if port == "" {
-           port = "5432"
+           	port = "5432"
         }
         if dbname == "" {
-           dbname = "postgres"
+        	dbname = "postgres"
         }
 	connStr := fmt.Sprintf("postgresql://%s:%s@%s:%s/%s?sslmode=disable", user, password, host, port, dbname)
 
