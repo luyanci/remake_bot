@@ -16,9 +16,9 @@ ENV POSTGRES_DB=postgres
 
 # 将初始化 SQL 脚本复制到镜像中（如果有额外的初始化需求）
 # COPY init.sql /docker-entrypoint-initdb.d/
-COPY --from=build /bot bot
-COPY --from=build /src/countries.json countries.json
-COPY --from=build /src/user_list.json user_list.json
+COPY --from=build /bot /bot
+COPY --from=build /src/countries.json /countries.json
+COPY --from=build /src/user_list.json /user_list.json
 
 
 # 暴露 PostgreSQL 的默认端口
