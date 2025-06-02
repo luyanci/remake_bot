@@ -93,8 +93,8 @@ func (h *Handler) CommandRemake(c tele.Context) error {
 	}
 
 	time.AfterFunc(5*time.Second, func() {
-		err = c.Bot().Delete(reply)
-		err = c.Bot().Delete(msg)
+		// err = c.Bot().Delete(reply)
+		// err = c.Bot().Delete(msg)
 		if err != nil {
 			return
 		}
@@ -124,8 +124,8 @@ func (h *Handler) CommandRemakeData(c tele.Context) error {
 	}
 
 	time.AfterFunc(10*time.Second, func() {
-		err = c.Bot().Delete(reply)
-		err = c.Bot().Delete(msg)
+		// err = c.Bot().Delete(reply)
+		// err = c.Bot().Delete(msg)
 		if err != nil {
 			return
 		}
@@ -178,8 +178,8 @@ func (h *Handler) CommandMsgStats(c tele.Context) error {
 	}
 
 	time.AfterFunc(10*time.Second, func() {
-		err = c.Bot().Delete(reply)
-		err = c.Bot().Delete(c.Message())
+		// err = c.Bot().Delete(reply)
+		// err = c.Bot().Delete(c.Message())
 		if err != nil {
 			return
 		}
