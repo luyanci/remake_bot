@@ -61,7 +61,7 @@ func (h *Handler) getRandomCountry() Country {
 func (h *Handler) CommandRemake(c tele.Context) error {
 	msg := c.Message()
 
-	remakeData := []string{"男孩子", "女孩子", "MtF", "FtM", "MtC", "萝莉", "正太", "武装直升机", "沃尔玛购物袋", "星巴克", "无性别", "扶她", "死胎", "xyn", "Furry","变态"}
+	remakeData := []string{"男孩子", "女孩子", "MtF", "FtM", "MtC", "萝莉", "正太", "武装直升机", "沃尔玛购物袋", "星巴克", "无性别", "扶她", "死胎", "xyn", "Furry", "变态", "鲨鲨", "鸽子", "狗狗", "海鸥" ,"猫猫"}
 
 	remakeResult := rand.Intn(len(remakeData))
 	randomCountry := h.getRandomCountry()
