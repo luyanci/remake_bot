@@ -13,12 +13,12 @@ RUN apk update && \
     apk add --no-cache build-base && \
     rm -rf /var/cache/apk/*
 
-RUN mkdir -p /var/lib/postgresql/data
-RUN chown -R postgres:postgres /var/lib/postgresql/data
-
 ENV POSTGRES_USER=postgres
 ENV POSTGRES_PASSWORD=114514
 ENV POSTGRES_DB=postgres
+
+RUN mkdir -p /var/lib/postgresql/data
+RUN chown -R postgres:postgres /var/lib/postgresql/data
 
 RUN su - postgres -c "initdb -D /var/lib/postgresql/data"
 
