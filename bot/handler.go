@@ -290,37 +290,6 @@ func (h *Handler) InlineQuery(c tele.Context) error {
 	})
 }
 
-var userList string[]
-
-func getGroupMembers(bot *telebot.Bot, chatID int64) error {
-    chat, err := bot.ChatByID(chatID)
-    if err != nil {
-        return err
-    }
-    if chat.Type == tele.ChatPrivate {
-        // 如果是私聊，只添加发送者自己（这里用聊天标题作为名字）
-        userList = append(userList, chat.Title)
-        return nil
-    }
-
-    members, err := bot.ChatMembers(chat)
-    if err != nil {
-        return err
-    }
-    for _, member := range members {
-        var name string
-        if member.User.FirstName != "" {
-            name = member.User.FirstName
-        } else if member.User.Username != "" {
-            name = member.User.Username
-        } else {
-            continue
-        }
-        userList = append(userList, name)
-    }
-    return nil
-}
-
 func (h *Handler) CommandEat(c tele.Context) error {
 	if !(c.Chat().Type == tele.ChatPrivate || c.Chat().ID == -1001965344356) {
 		fmt.Println(c.Chat().ID)
