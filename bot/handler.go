@@ -10,6 +10,7 @@ import (
 	"strconv"
 	"sync"
 	"time"
+	"strings"
 )
 
 type Handler struct {
@@ -37,6 +38,7 @@ func (h *Handler) RegisterAll() {
 	h.bot.Handle("/remake", h.CommandRemake)
 	h.bot.Handle("/remake_data", h.CommandRemakeData)
 	h.bot.Handle("/msg_stats", h.CommandMsgStats)
+	h.bot.Handle("/eat",h.CommandEat)
 	h.bot.Handle(tele.OnText, h.CommandOnText)
 	h.bot.Handle(tele.OnSticker, h.CommandOnSticker)
 }
@@ -61,7 +63,7 @@ func (h *Handler) getRandomCountry() Country {
 func (h *Handler) CommandRemake(c tele.Context) error {
 	msg := c.Message()
 
-	remakeData := []string{"男孩子", "女孩子", "MtF", "FtM", "MtC", "萝莉", "正太", "武装直升机", "沃尔玛购物袋", "星巴克", "无性别", "扶她", "死胎", "xyn", "Furry", "变态", "鲨鲨", "鸽子", "狗狗", "海鸥" ,"猫猫","鼠鼠","猪猪","薯条","GG Bond"}
+	remakeData := []string{"男孩子", "女孩子", "MtF", "FtM", "MtC", "萝莉", "正太", "武装直升机", "沃尔玛购物袋", "星巴克", "无性别", "扶她", "死胎", "xyn", "Furry", "变态", "鲨鲨", "鸽子", "狗狗", "海鸥" ,"猫猫","鼠鼠","猪猪","薯条","GG Bond","老色批"}
 	remakeLocate := []string{"首都","省会","直辖市","市区","县城","自治区","农村","大学","沙漠"}
 
 	remakeResult := rand.Intn(len(remakeData))
@@ -181,7 +183,7 @@ func (h *Handler) CommandMsgStats(c tele.Context) error {
 	}
 
 	time.AfterFunc(10*time.Second, func() {
-  fmt.Println("The variable value is", reply)
+  		fmt.Println("The variable value is", reply)
 		// err = c.Bot().Delete(reply)
 		// err = c.Bot().Delete(c.Message())
 		if err != nil {
@@ -288,37 +290,42 @@ func (h *Handler) InlineQuery(c tele.Context) error {
 	})
 }
 
-//func CommandEat(c tele.Context) error {
-//	if !(c.Chat().Type == tele.ChatPrivate || c.Chat().ID == -1001965344356) {
-//		fmt.Println(c.Chat().ID)
-//		return nil
-//	}
-//
-//	method := []string{"炒", "蒸", "煮", "红烧", "爆炒", "烤", "炸", "煎", "炖", "焖", "炖", "卤"}
-//
-//	// 获取时间段
-//	hour := time.Now().Hour()
-//	var hourText string
-//	switch {
-//	case hour > 6 && hour <= 10:
-//		hourText = "早上"
-//	case hour > 10 && hour <= 14:
-//		hourText = "中午"
-//	case hour > 14 && hour <= 17:
-//		hourText = "下午"
-//	case hour > 18 && hour <= 21:
-//		hourText = "晚上"
-//	default:
-//		hourText = "宵夜"
-//	}
-//
-//	var name string
-//	if strings.Contains(c.Sender().FirstName, " | ") {
-//		name = strings.Split(c.Sender().FirstName, " | ")[0]
-//	} else {
-//		name = c.Sender().FirstName
-//	}
-//
-//	result := fmt.Sprintf("今天%s吃 %s %s %s", hourText, name, method[rand.Intn(len(method))], userList[crand.Intn(len(userList))])
-//	return c.Reply(result)
-//}
+func (h *Handler) CommandEat(c tele.Context) error {
+	if !(c.Chat().Type == tele.ChatPrivate || c.Chat().ID == -1001965344356) {
+		fmt.Println(c.Chat().ID)
+		return nil
+	}
+
+	method := []string{"炒", "蒸", "煮", "红烧", "爆炒", "烤", "炸", "煎", "炖", "焖", "炖", "卤"}
+
+	loc, err := time.LoadLocation("Asia/Shanghai")
+	if err != nil {
+		return err
+	}		        
+	now := time.Now().In(loc)
+	// 获取时间段
+	hour := now.Hour()
+	var hourText string
+	switch {
+	case hour > 6 && hour <= 10:
+		hourText = "早上"
+	case hour > 10 && hour <= 14:
+		hourText = "中午"
+	case hour > 14 && hour <= 17:
+		hourText = "下午"
+	case hour > 18 && hour <= 21:
+		hourText = "晚上"
+	default:
+		hourText = "宵夜"
+	}
+
+	var name string
+	if strings.Contains(c.Sender().FirstName, " | ") {
+		name = strings.Split(c.Sender().FirstName, " | ")[0]
+	} else {
+		name = c.Sender().FirstName
+	}
+
+	result := fmt.Sprintf("今天%s吃 %s %s %s", hourText, name, method[rand.Intn(len(method))], userList[crand.Intn(len(userList))])
+	return c.Reply(result)
+}
