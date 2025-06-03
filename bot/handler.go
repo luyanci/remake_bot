@@ -303,8 +303,8 @@ func (h *Handler) CommandEat(c tele.Context) error {
                 return err
         }
         if chat.Type == tele.ChatPrivate {
-            // 如果是私聊，只添加发送者自己（这里用聊天标题作为名字）
-            userList = append(userList, chat.Title)
+            // 如果是私聊，只添加发送者自己
+            userList = append(userList, c.Sender().FirstName)
         } else {
 		// 吃管理吧
             members, err := h.bot.AdminsOf(chat)
