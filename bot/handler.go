@@ -326,10 +326,7 @@ func (h *Handler) CommandEat(c tele.Context) error {
 
 	method := []string{"炒", "蒸", "煮", "红烧", "爆炒", "烤", "炸", "煎", "炖", "焖", "炖", "卤"}
 
-	loc, err := time.LoadLocation("Asia/Shanghai")
-	if err != nil {
-		return err
-	}		        
+	loc := time.FixedZone("Asia/Shanghai", 8*60*60)
 	now := time.Now().In(loc)
 	// 获取时间段
 	hour := now.Hour()
