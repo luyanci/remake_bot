@@ -291,10 +291,10 @@ func (h *Handler) InlineQuery(c tele.Context) error {
 }
 
 func (h *Handler) CommandEat(c tele.Context) error {
-	if !(c.Chat().Type == tele.ChatPrivate || c.Chat().ID == -1001965344356) {
-		fmt.Println(c.Chat().ID)
-		return nil
-	}
+	//if !(c.Chat().Type == tele.ChatPrivate || c.Chat().ID == -1001965344356) {
+	//	fmt.Println(c.Chat().ID)
+	//	return nil
+	//}
 
         var userList []string
         chatID := c.Chat().ID
@@ -306,7 +306,8 @@ func (h *Handler) CommandEat(c tele.Context) error {
             // 如果是私聊，只添加发送者自己（这里用聊天标题作为名字）
             userList = append(userList, chat.Title)
         } else {
-            members, err := h.bot.ChatMembers(chat)
+		// 吃管理吧
+            members, err := h.bot.AdminsOf(chat)
             if err != nil {
                 return err
             }
@@ -353,6 +354,6 @@ func (h *Handler) CommandEat(c tele.Context) error {
 		name = c.Sender().FirstName
 	}
 
-	result := fmt.Sprintf("今天%s吃 %s %s %s", hourText, name, method[rand.Intn(len(method))], userList[crand.Intn(len(userList))])
+	result := fmt.Sprintf("%s 今天%s吃 %s %s", name, hourText, method[rand.Intn(len(method))], userList[rand.Intn(len(userList))])
 	return c.Reply(result)
 }
