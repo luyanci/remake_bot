@@ -296,6 +296,33 @@ func (h *Handler) CommandEat(c tele.Context) error {
 		return nil
 	}
 
+        var userList []string
+        chatID := c.Chat().ID
+        chat, err := h.bot.ChatByID(chatID)
+        if err != nil {
+                return err
+        }
+        if chat.Type == tele.ChatPrivate {
+            // 如果是私聊，只添加发送者自己（这里用聊天标题作为名字）
+            userList = append(userList, chat.Title)
+        } else {
+            members, err := h.bot.ChatMembers(chat)
+            if err != nil {
+                return err
+            }
+            for _, member := range members {
+                var name string
+                if member.User.FirstName != "" {
+                    name = member.User.FirstName
+                } else if member.User.Username != "" {
+                    name = member.User.Username
+                } else {
+                    continue
+                }
+                userList = append(userList, name)
+            }
+        }
+
 	method := []string{"炒", "蒸", "煮", "红烧", "爆炒", "烤", "炸", "煎", "炖", "焖", "炖", "卤"}
 
 	loc, err := time.LoadLocation("Asia/Shanghai")
