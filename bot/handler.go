@@ -335,13 +335,13 @@ func (h *Handler) CommandEat(c tele.Context) error {
 	hour := now.Hour()
 	var hourText string
 	switch {
-	case hour > 6 && hour <= 10:
+	case hour >= 6 && hour < 10:
 		hourText = "早上"
-	case hour > 10 && hour <= 14:
+	case hour >= 10 && hour < 14:
 		hourText = "中午"
-	case hour > 14 && hour <= 17:
+	case hour >= 14 && hour < 17:
 		hourText = "下午"
-	case hour > 18 && hour <= 21:
+	case hour >= 18 && hour <= 21:
 		hourText = "晚上"
 	default:
 		hourText = "宵夜"
