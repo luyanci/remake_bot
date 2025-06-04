@@ -313,6 +313,9 @@ func (h *Handler) CommandEat(c tele.Context) error {
             }
             for _, member := range members {
                 var name string
+		if member.User.ID == c.Sender().ID {
+		    continue
+		}
                 if member.User.FirstName != "" {
                     name = member.User.FirstName
                 } else if member.User.Username != "" {
