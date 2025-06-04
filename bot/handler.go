@@ -313,7 +313,7 @@ func (h *Handler) CommandEat(c tele.Context) error {
             }
             for _, member := range members {
                 var name string
-		if member.User.ID == c.Sender().ID {
+		if member.User.ID == c.Sender().ID || member.User.ID == c.Bot().Me.ID {
 		    continue
 		}
                 if member.User.FirstName != "" {
