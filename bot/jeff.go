@@ -8,8 +8,10 @@ import (
     "time"
 )
 
+var filename := "jeff.txt"
+
 func getLineCount() (int, error) {
-    file, err := os.Open("./jeff.txt")
+    file, err := os.Open(filename)
     if err != nil {
         return 0, err
     }
