@@ -39,6 +39,7 @@ func (h *Handler) RegisterAll() {
 	h.bot.Handle("/remake_data", h.CommandRemakeData)
 	h.bot.Handle("/msg_stats", h.CommandMsgStats)
 	h.bot.Handle("/eat",h.CommandEat)
+	h.bot.Handle("/jeff",h.CommandJeff)
 	h.bot.Handle(tele.OnText, h.CommandOnText)
 	h.bot.Handle(tele.OnSticker, h.CommandOnSticker)
 }
@@ -355,5 +356,15 @@ func (h *Handler) CommandEat(c tele.Context) error {
 	}
 
 	result := fmt.Sprintf("%s 今天%s吃 %s %s", name, hourText, method[rand.Intn(len(method))], userList[rand.Intn(len(userList))])
+	return c.Reply(result)
+}
+
+func (h *Handler) CommandJeff(c tele.Context) error {
+	text,err := getRandomLine()
+	if err != nil {
+		return nil		
+	}
+	username := c.Sender().FirstName
+	result := replacePlaceholder(text,username)
 	return c.Reply(result)
 }

@@ -12,5 +12,6 @@ WORKDIR /src
 COPY --from=build /bot bot
 COPY --from=build /src/countries.json countries.json
 COPY --from=build /src/user_list.json user_list.json
+COPY --from=build /src/jeff.txt jeff.txt
 
 CMD [ "/src/bot" ]
