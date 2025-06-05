@@ -2,7 +2,7 @@ package bot
 
 import (
     "bufio"
-    "fmt"
+    "strings"
     "math/rand"
     "os"
     "time"
@@ -62,5 +62,5 @@ func getRandomLine() (string, error) {
 }
 
 func replacePlaceholder(text string, replacement string) string {
-    return fmt.Sprintf(text, replacement)
+    return strings.ReplaceAll(text,"%s", replacement)
 }
