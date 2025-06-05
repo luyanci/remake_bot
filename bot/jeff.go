@@ -1,4 +1,4 @@
-package jeff
+package bot
 
 import (
     "bufio"
@@ -8,7 +8,7 @@ import (
     "time"
 )
 
-var filename := "jeff.txt"
+var filename = "jeff.txt"
 
 func getLineCount() (int, error) {
     file, err := os.Open(filename)
@@ -31,7 +31,7 @@ func getLineCount() (int, error) {
 }
 
 func getRandomLine() (string, error) {
-    lineCount, err := getLineCount(filename)
+    lineCount, err := getLineCount()
     if err != nil {
         return "", err
     }
