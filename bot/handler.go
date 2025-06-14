@@ -1,13 +1,10 @@
 package bot
 
 import (
-	"database/sql"
 	"fmt"
-	"github.com/luyanci/remake_bot/bot/quotely"
 	"go.uber.org/zap"
 	tele "gopkg.in/telebot.v3"
 	"math/rand"
-	"strconv"
 	"sync"
 	"time"
 	"strings"
@@ -16,7 +13,6 @@ import (
 type Handler struct {
 	bot      *tele.Bot
 	logger   *zap.Logger
-	database *sql.DB
 
 	mutex sync.Mutex
 
@@ -24,24 +20,19 @@ type Handler struct {
 	messageCounter *MessageCounter
 }
 
-func NewHandler(bot *tele.Bot, logger *zap.Logger, remake *Remake, counter *MessageCounter) *Handler {
+func NewHandler(bot *tele.Bot, logger *zap.Logger, remake *Remake) *Handler {
 	return &Handler{
 		bot:            bot,
 		logger:         logger,
 		remake:         remake,
-		messageCounter: counter,
 	}
 }
 
 func (h *Handler) RegisterAll() {
-	h.bot.Handle(tele.OnQuery, h.InlineQuery)
 	h.bot.Handle("/remake", h.CommandRemake)
 	h.bot.Handle("/remake_data", h.CommandRemakeData)
-	h.bot.Handle("/msg_stats", h.CommandMsgStats)
 	h.bot.Handle("/eat",h.CommandEat)
 	h.bot.Handle("/jeff",h.CommandJeff)
-	h.bot.Handle(tele.OnText, h.CommandOnText)
-	h.bot.Handle(tele.OnSticker, h.CommandOnSticker)
 }
 
 func (h *Handler) getRandomCountry() Country {
@@ -99,8 +90,6 @@ func (h *Handler) CommandRemake(c tele.Context) error {
 	}
 
 	time.AfterFunc(5*time.Second, func() {
-		// err = c.Bot().Delete(reply)
-		// err = c.Bot().Delete(msg)
 		if err != nil {
 			return
 		}
@@ -137,158 +126,6 @@ func (h *Handler) CommandRemakeData(c tele.Context) error {
 		}
 	})
 	return nil
-}
-
-func (h *Handler) CommandOnSticker(c tele.Context) error {
-	if c.Chat().ID != -1001965344356 {
-		return nil
-	}
-
-	err := h.messageCounter.Increment(c.Sender().ID)
-	if err != nil {
-		return err
-	}
-
-	return nil
-}
-
-func (h *Handler) CommandMsgStats(c tele.Context) error {
-	if c.Chat().ID != -1001965344356 {
-		return nil
-	}
-
-	count, err := h.messageCounter.GetCount(c.Sender().ID)
-	if err != nil {
-		return err
-	}
-
-	topID, topCounter, err := h.messageCounter.GetTopUserInLast24Hours()
-	if err != nil {
-		return err
-	}
-
-	// 获取用户信息
-	member, err := c.Bot().ChatMemberOf(c.Chat(), &tele.User{ID: topID})
-	if err != nil {
-		return err
-	}
-
-	text := fmt.Sprintf("您今天发了 %d 条消息\n最近 24 小时内的龙王是 %s！一共水了 %d 条消息", count, member.User.FirstName, topCounter)
-	reply, err := c.Bot().Reply(c.Message(), text)
-	if err != nil {
-		return err
-	}
-
-	if c.Chat().Type == tele.ChatPrivate {
-		return nil
-	}
-
-	time.AfterFunc(10*time.Second, func() {
-  		fmt.Println("The variable value is", reply)
-		// err = c.Bot().Delete(reply)
-		// err = c.Bot().Delete(c.Message())
-		if err != nil {
-			return
-		}
-	})
-	return nil
-}
-
-func (h *Handler) CommandOnText(c tele.Context) error {
-	if c.Chat().ID != -1001965344356 {
-		return nil
-	}
-
-	err := h.messageCounter.Increment(c.Sender().ID)
-	if err != nil {
-		return err
-	}
-
-	if c.Message().ReplyTo != nil {
-		text := quotely.QuoteReply(c.Bot(), c.Message())
-		if text != "" {
-			return c.Reply(text, tele.ModeMarkdownV2)
-		}
-	}
-	return nil
-}
-
-func (h *Handler) getQuote(text string) (error, []string, []string) {
-	var rows *sql.Rows
-	var err error
-	if text == "" {
-		query := "select text, \"from\" from result_new where from_id not like 'channel%' order by random() limit 50"
-		rows, err = h.database.Query(query)
-	} else {
-		query := "select text, \"from\" from result_new where from_id not like 'channel%' AND text like '%' || $1 || '%' order by random() limit 50"
-		rows, err = h.database.Query(query, text)
-	}
-	if err != nil {
-		return err, nil, nil
-	}
-
-	defer func(rows *sql.Rows) {
-		err := rows.Close()
-		if err != nil {
-			return
-		}
-	}(rows)
-
-	var resultText []string
-	var from []string
-	for rows.Next() {
-		var t, f string
-		if err := rows.Scan(&t, &f); err != nil {
-			return err, nil, nil
-		}
-		resultText = append(resultText, t)
-		from = append(from, f)
-	}
-
-	return nil, resultText, from
-}
-
-func (h *Handler) InlineQuery(c tele.Context) error {
-	member, err := c.Bot().ChatMemberOf(
-		&tele.Chat{ID: -1001965344356},
-		c.Sender(),
-	)
-	if err != nil {
-		fmt.Println(fmt.Sprintf("sender: %s 不在群", c.Sender().FirstName))
-		return err
-	}
-	if member.Role != "creator" {
-		fmt.Println(fmt.Sprintf("sender: %s 不在群", c.Sender().FirstName))
-		return nil
-	}
-
-	var resultText []string
-	var from []string
-
-	if c.Query().Text == "" {
-		err, resultText, from = h.getQuote("")
-	} else {
-		err, resultText, from = h.getQuote(c.Query().Text)
-	}
-	results := make(tele.Results, len(resultText))
-
-	if err != nil {
-		return err
-	}
-
-	for i, text := range resultText {
-		results[i] = &tele.ArticleResult{
-			Title:       text,
-			Text:        fmt.Sprintf("%s: %s", from[i], text),
-			Description: fmt.Sprintf("来自 %s", from[i]),
-		}
-		results[i].SetResultID(strconv.Itoa(i))
-	}
-
-	return c.Answer(&tele.QueryResponse{
-		Results:   results,
-		CacheTime: 0,
-	})
 }
 
 func (h *Handler) CommandEat(c tele.Context) error {
