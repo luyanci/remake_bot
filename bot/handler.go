@@ -214,9 +214,9 @@ func (h *Handler) CommandJeff(c tele.Context) error {
 	if c.Message().ReplyTo != nil {
 		if c.Message().ReplyTo.Text != "" {
 			// topic message cannot get reply sender correctly
-			username = c.Sender().FirstName
-		} else {
 			username = c.Message().ReplyTo.Sender.FirstName
+		} else {
+			username = c.Sender().FirstName
 		}
 	} else {
 		username = c.Sender().FirstName
