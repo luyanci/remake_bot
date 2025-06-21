@@ -212,7 +212,7 @@ func (h *Handler) CommandJeff(c tele.Context) error {
 		return nil
 	}
 	if c.Message().ReplyTo != nil {
-		if c.Message().ReplyTo.Text == "" && c.Message().TopicMessage {
+		if c.Message().ReplyTo.Text != "" {
 			// topic message cannot get reply sender correctly
 			username = c.Sender().FirstName
 		} else {
