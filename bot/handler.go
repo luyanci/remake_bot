@@ -143,6 +143,10 @@ func (h *Handler) CommandEat(c tele.Context) error {
         if chat.Type == tele.ChatPrivate {
             // 如果是私聊，只添加发送者自己
             userList = append(userList, c.Sender().FirstName)
+	} else {
+		if c.Message().ReplyTo != nil && c.Message().ReplyTo.Text != "" && !c.Message().TopicMessage {
+			// 如果是回复消息且不是topic消息(且回复文本不为空)，添加回复的用户
+			userList = append(userList, c.Message().ReplyTo.Sender.FirstName)
         } else {
 		// 吃管理吧
             members, err := h.bot.AdminsOf(chat)
@@ -162,6 +166,11 @@ func (h *Handler) CommandEat(c tele.Context) error {
                     continue
                 }
                 userList = append(userList, name)
+			}
+			if len(userList) == 0 {
+				// 如果没有管理员，添加发送者自己
+				userList = append(userList, c.Sender().FirstName)
+			}
             }
         }
 
@@ -197,11 +206,22 @@ func (h *Handler) CommandEat(c tele.Context) error {
 }
 
 func (h *Handler) CommandJeff(c tele.Context) error {
-	text,err := getRandomLine()
+	text, err := getRandomLine()
+	username := ""
 	if err != nil {
 		return nil		
 	}
-	username := c.Sender().FirstName
-	result := replacePlaceholder(text,username)
+	if c.Message().ReplyTo != nil {
+		if c.Message().ReplyTo.Text == "" && !c.Message().TopicMessage {
+			// topic message cannot get reply sender correctly
+			username = c.Sender().FirstName
+		} else {
+			username = c.Message().ReplyTo.Sender.FirstName
+		}
+	} else {
+		username = c.Sender().FirstName
+	}
+
+	result := replacePlaceholder(text, username)
 	return c.Reply(result)
 }
