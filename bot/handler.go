@@ -2,37 +2,37 @@ package bot
 
 import (
 	"fmt"
-	"go.uber.org/zap"
-	tele "gopkg.in/telebot.v3"
 	"math/rand"
+	"strings"
 	"sync"
 	"time"
-	"strings"
+
+	"go.uber.org/zap"
+	tele "gopkg.in/telebot.v3"
 )
 
 type Handler struct {
-	bot      *tele.Bot
-	logger   *zap.Logger
+	bot    *tele.Bot
+	logger *zap.Logger
 
 	mutex sync.Mutex
 
-	remake         *Remake
-	messageCounter *MessageCounter
+	remake *Remake
 }
 
 func NewHandler(bot *tele.Bot, logger *zap.Logger, remake *Remake) *Handler {
 	return &Handler{
-		bot:            bot,
-		logger:         logger,
-		remake:         remake,
+		bot:    bot,
+		logger: logger,
+		remake: remake,
 	}
 }
 
 func (h *Handler) RegisterAll() {
 	h.bot.Handle("/remake", h.CommandRemake)
 	h.bot.Handle("/remake_data", h.CommandRemakeData)
-	h.bot.Handle("/eat",h.CommandEat)
-	h.bot.Handle("/jeff",h.CommandJeff)
+	h.bot.Handle("/eat", h.CommandEat)
+	h.bot.Handle("/jeff", h.CommandJeff)
 }
 
 func (h *Handler) getRandomCountry() Country {
@@ -55,8 +55,8 @@ func (h *Handler) getRandomCountry() Country {
 func (h *Handler) CommandRemake(c tele.Context) error {
 	msg := c.Message()
 
-	remakeData := []string{"男孩子", "女孩子", "MtF", "FtM", "MtC", "萝莉", "正太", "武装直升机", "沃尔玛购物袋", "星巴克", "无性别", "扶她", "死胎", "xyn", "Furry", "变态", "鲨鲨", "鸽子", "狗狗", "海鸥" ,"猫猫","鼠鼠","猪猪","薯条","GG Bond","老色批","柚子厨"}
-	remakeLocate := []string{"首都","省会","直辖市","市区","县城","自治区","农村","大学","沙漠"}
+	remakeData := []string{"男孩子", "女孩子", "MtF", "FtM", "MtC", "萝莉", "正太", "武装直升机", "沃尔玛购物袋", "星巴克", "无性别", "扶她", "死胎", "xyn", "Furry", "变态", "鲨鲨", "鸽子", "狗狗", "海鸥", "猫猫", "鼠鼠", "猪猪", "薯条", "GG Bond", "老色批", "柚子厨"}
+	remakeLocate := []string{"首都", "省会", "直辖市", "市区", "县城", "自治区", "农村", "大学", "沙漠"}
 
 	remakeResult := rand.Intn(len(remakeData))
 	remakeResult_Locate := rand.Intn(len(remakeLocate))
@@ -78,7 +78,7 @@ func (h *Handler) CommandRemake(c tele.Context) error {
 		}
 	}()
 
-	text := fmt.Sprintf("重生成功！您出生在 %s 的 %s ，是 %s 喵。", randomCountry.CountryName,remakeLocate[remakeResult_Locate], remakeData[remakeResult])
+	text := fmt.Sprintf("重生成功！您出生在 %s 的 %s ，是 %s 喵。", randomCountry.CountryName, remakeLocate[remakeResult_Locate], remakeData[remakeResult])
 
 	_, err := c.Bot().Reply(msg, text)
 	if err != nil {
@@ -134,45 +134,45 @@ func (h *Handler) CommandEat(c tele.Context) error {
 	//	return nil
 	//}
 
-        var userList []string
-        chatID := c.Chat().ID
-        chat, err := h.bot.ChatByID(chatID)
-        if err != nil {
-                return err
-        }
-        if chat.Type == tele.ChatPrivate {
-            // 如果是私聊，只添加发送者自己
-            userList = append(userList, c.Sender().FirstName)
+	var userList []string
+	chatID := c.Chat().ID
+	chat, err := h.bot.ChatByID(chatID)
+	if err != nil {
+		return err
+	}
+	if chat.Type == tele.ChatPrivate {
+		// 如果是私聊，只添加发送者自己
+		userList = append(userList, c.Sender().FirstName)
 	} else {
-		if c.Message().ReplyTo != nil && c.Message().ReplyTo.Text != "" && !c.Message().TopicMessage {
-			// 如果是回复消息且不是topic消息(且回复文本不为空)，添加回复的用户
+		if c.Message().ReplyTo != nil && c.Message().ReplyTo.Text != "" {
+			// 如果是回复消息且不是topic消息(回复文本不为空)，添加回复的用户
 			userList = append(userList, c.Message().ReplyTo.Sender.FirstName)
-        } else {
-		// 吃管理吧
-            members, err := h.bot.AdminsOf(chat)
-            if err != nil {
-                return err
-            }
-            for _, member := range members {
-                var name string
-		if member.User.ID == c.Sender().ID || member.User.ID == c.Bot().Me.ID {
-		    continue
-		}
-                if member.User.FirstName != "" {
-                    name = member.User.FirstName
-                } else if member.User.Username != "" {
-                    name = member.User.Username
-                } else {
-                    continue
-                }
-                userList = append(userList, name)
+		} else {
+			// 吃管理吧
+			members, err := h.bot.AdminsOf(chat)
+			if err != nil {
+				return err
+			}
+			for _, member := range members {
+				var name string
+				if member.User.ID == c.Sender().ID || member.User.ID == c.Bot().Me.ID {
+					continue
+				}
+				if member.User.FirstName != "" {
+					name = member.User.FirstName
+				} else if member.User.Username != "" {
+					name = member.User.Username
+				} else {
+					continue
+				}
+				userList = append(userList, name)
 			}
 			if len(userList) == 0 {
 				// 如果没有管理员，添加发送者自己
 				userList = append(userList, c.Sender().FirstName)
 			}
-            }
-        }
+		}
+	}
 
 	method := []string{"炒", "蒸", "煮", "红烧", "爆炒", "烤", "炸", "煎", "炖", "焖", "炖", "卤"}
 
@@ -209,10 +209,10 @@ func (h *Handler) CommandJeff(c tele.Context) error {
 	text, err := getRandomLine()
 	username := ""
 	if err != nil {
-		return nil		
+		return nil
 	}
 	if c.Message().ReplyTo != nil {
-		if c.Message().ReplyTo.Text == "" && !c.Message().TopicMessage {
+		if c.Message().ReplyTo.Text == "" && c.Message().TopicMessage {
 			// topic message cannot get reply sender correctly
 			username = c.Sender().FirstName
 		} else {
