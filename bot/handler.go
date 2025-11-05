@@ -55,13 +55,17 @@ func (h *Handler) getRandomCountry() Country {
 func (h *Handler) CommandRemake(c tele.Context) error {
 	msg := c.Message()
 
-	remakeData := []string{"男孩子", "女孩子", "MtF", "FtM", "MtC", "萝莉", "正太", "武装直升机", "沃尔玛购物袋", "星巴克", "无性别", "扶她", "死胎", "xyn", "Furry", "变态", "鲨鲨", "鸽子", "狗狗", "海鸥", "猫猫", "鼠鼠", "猪猪", "薯条", "GG Bond", "老色批", "柚子厨","小杂鱼~","小八嘎"}
+	remakeData := []string{"男孩子", "女孩子", "MtF", "FtM", "MtC", "萝莉", "正太", "武装直升机", "沃尔玛购物袋", "星巴克", "无性别", "扶她", "死胎", "xyn", "Furry", "变态", "鲨鲨", "鸽子", "狗狗", "海鸥", "猫猫", "鼠鼠", "猪猪", "薯条", "GG Bond", "老色批", "柚子厨","小杂鱼~", "小八嘎", "小烧0", "大猛1"}
 	remakeLocate := []string{"首都", "省会", "直辖市", "市区", "县城", "自治区", "农村", "大学", "沙漠"}
 
-	remakeResult := rand.Intn(len(remakeData))
-	remakeResult_Locate := rand.Intn(len(remakeLocate))
+	remakeResult := remakeData[rand.Intn(len(remakeData))]
+	remakeResult_Locate := remakeLocate[rand.Intn(len(remakeLocate))]
 	randomCountry := h.getRandomCountry()
 
+	if c.Sender().ID == 7657618109 || c.Message().ReplyTo.Sender.ID == 7657618109 {
+		remakeResult = "小烧0"
+	}
+	
 	func() {
 		h.mutex.Lock()
 		defer h.mutex.Unlock()
@@ -72,13 +76,13 @@ func (h *Handler) CommandRemake(c tele.Context) error {
 		oldGender := h.remake.RemakeCount[c.Sender().ID].count
 		h.remake.RemakeCount[c.Sender().ID] = &RemakeData{
 			country: randomCountry.CountryName,
-			locate:  remakeLocate[remakeResult_Locate],
-			gender:  remakeData[remakeResult],
+			locate:  remakeResult_Locate,
+			gender:  remakeResult,
 			count:   oldGender + 1,
 		}
 	}()
 
-	text := fmt.Sprintf("重生成功！您出生在 %s 的 %s ，是 %s 喵。", randomCountry.CountryName, remakeLocate[remakeResult_Locate], remakeData[remakeResult])
+	text := fmt.Sprintf("重生成功！您出生在 %s 的 %s ，是 %s 喵。", randomCountry.CountryName, remakeResult_Locate, remakeResult)
 
 	_, err := c.Bot().Reply(msg, text)
 	if err != nil {
