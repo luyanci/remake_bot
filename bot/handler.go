@@ -179,6 +179,12 @@ func (h *Handler) CommandEat(c tele.Context) error {
 	}
 
 	method := []string{"炒", "蒸", "煮", "红烧", "爆炒", "烤", "炸", "煎", "炖", "焖", "炖", "卤"}
+	method_text := method[rand.Intn(len(method))]
+
+	if c.Message().ReplyTo.Sender.ID == 7657618109 {
+		method_text = "爆炒"
+	}
+
 
 	loc := time.FixedZone("Asia/Shanghai", 8*60*60)
 	now := time.Now().In(loc)
@@ -205,7 +211,7 @@ func (h *Handler) CommandEat(c tele.Context) error {
 		name = c.Sender().FirstName
 	}
 
-	result := fmt.Sprintf("%s 今天%s吃 %s %s", name, hourText, method[rand.Intn(len(method))], userList[rand.Intn(len(userList))])
+	result := fmt.Sprintf("%s 今天%s吃 %s %s", name, hourText, method_text, userList[rand.Intn(len(userList))])
 	return c.Reply(result)
 }
 
