@@ -62,7 +62,7 @@ func (h *Handler) CommandRemake(c tele.Context) error {
 	remakeResult_Locate := remakeLocate[rand.Intn(len(remakeLocate))]
 	randomCountry := h.getRandomCountry()
 
-	if c.Sender().ID == 7657618109 || c.Message().ReplyTo.Sender.ID == 7657618109 {
+	if c.Message().ReplyTo != nil && (c.Sender().ID == 7657618109 || c.Message().ReplyTo.Sender.ID == 7657618109) {
 		remakeResult = "小烧0"
 	}
 	
@@ -181,7 +181,7 @@ func (h *Handler) CommandEat(c tele.Context) error {
 	method := []string{"炒", "蒸", "煮", "红烧", "爆炒", "烤", "炸", "煎", "炖", "焖", "炖", "卤"}
 	method_text := method[rand.Intn(len(method))]
 
-	if c.Message().ReplyTo.Sender.ID == 7657618109 {
+	if c.Message().ReplyTo != nil && c.Message().ReplyTo.Sender.ID == 7657618109 {
 		method_text = "爆炒"
 	}
 
