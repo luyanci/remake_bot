@@ -62,7 +62,7 @@ func (h *Handler) CommandRemake(c tele.Context) error {
 	remakeResult_Locate := remakeLocate[rand.Intn(len(remakeLocate))]
 	randomCountry := h.getRandomCountry()
 
-	if c.Sender().ID == 7657618109 || (c.Message().ReplyTo != nil &&  c.Message().ReplyTo.Sender.ID == 7657618109) {
+	if c.Sender().ID == 7657618109  {
 		remakeResult = "小烧0"
 	}
 	
