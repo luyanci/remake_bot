@@ -55,7 +55,7 @@ func (h *Handler) getRandomCountry() Country {
 func (h *Handler) CommandRemake(c tele.Context) error {
 	msg := c.Message()
 
-	remakeData := []string{"男孩子", "女孩子", "MtF", "FtM", "MtC", "萝莉", "正太", "武装直升机", "沃尔玛购物袋", "星巴克", "无性别", "扶她", "死胎", "xyn", "Furry", "变态", "鲨鲨", "鸽子", "狗狗", "海鸥", "猫猫", "鼠鼠", "猪猪", "薯条", "GG Bond", "老色批", "柚子厨","小杂鱼~", "小八嘎", "小烧0", "大猛1"}
+	remakeData := []string{"男孩子", "女孩子", "MtF", "FtM", "MtC", "萝莉", "正太", "武装直升机", "沃尔玛购物袋", "星巴克", "无性别", "扶她", "死胎", "xyn", "Furry", "变态", "鲨鲨", "鸽子", "狗狗", "海鸥", "猫猫", "鼠鼠", "猪猪", "薯条", "GG Bond", "老色批", "柚子厨","小杂鱼~", "小八嘎", "小烧0", "大猛1","rbq"}
 	remakeLocate := []string{"首都", "省会", "直辖市", "市区", "县城", "自治区", "农村", "大学", "沙漠"}
 
 	remakeResult := remakeData[rand.Intn(len(remakeData))]
@@ -63,7 +63,8 @@ func (h *Handler) CommandRemake(c tele.Context) error {
 	randomCountry := h.getRandomCountry()
 
 	if c.Sender().ID == 7657618109  {
-		remakeResult = "小烧0"
+		remake_m0r := []string{"小烧0","rbq","xyn","MtF"}
+		remakeResult = remake_m0r[rand.Intn(len(remake_m0r))]
 	}
 	
 	func() {
@@ -182,7 +183,8 @@ func (h *Handler) CommandEat(c tele.Context) error {
 	method_text := method[rand.Intn(len(method))]
 
 	if c.Message().ReplyTo != nil && c.Message().ReplyTo.Sender.ID == 7657618109 {
-		method_text = "爆炒"
+		method := []string{"炒","爆炒","水煎","米煎","呛煎"}
+		method_text = method[rand.Intn(len(method))]
 	}
 
 
