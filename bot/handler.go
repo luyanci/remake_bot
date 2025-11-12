@@ -65,7 +65,7 @@ func (h *Handler) CommandRemake(c tele.Context) error {
 	if c.Sender().ID == 7657618109  {
 		remake_m0r := []string{"小烧0","rbq","xyn","MtF","烧猫猫","萝莉","斐济杯","公用斐济杯","小杂鱼~","诡计多端的0"}
 		remakeResult = remake_m0r[rand.Intn(len(remake_m0r))]
-		remake_m0r_locate := []string{"柔棒", "烧0省", "烧0市", "烧0区", "烧0县", "自治0", "猫娘村"}
+		remake_m0r_locate := []string{"烧0省", "烧0市", "烧0区", "烧0县", "自治0", "猫娘村"}
 		remakeResult_Locate = remake_m0r_locate[rand.Intn(len(remake_m0r_locate))]
 	}
 	
